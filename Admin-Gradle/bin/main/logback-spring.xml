@@ -39,13 +39,15 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <!-- Suppress other unnecessary logs -->
-    <logger name="de.codecentric.boot.admin.server.services" level="ERROR" additivity="false">
-        <appender-ref ref="INSTANCE_EVENTS_FILE"/>
-    </logger>
-    <logger name="org.springframework.web.reactive.function.client" level="ERROR" additivity="false">
-        <appender-ref ref="INSTANCE_EVENTS_FILE"/>
-    </logger>
+    <!-- Suppress noisy loggers -->
+    <logger name="de.codecentric.boot.admin.server.web" level="ERROR"/>
+    <logger name="de.codecentric.boot.admin.server.services" level="ERROR"/>
+    <logger name="de.codecentric.boot.admin.server.events" level="ERROR"/>
+    <logger name="org.springframework.web" level="ERROR"/>
+    <logger name="org.springframework.web.reactive.function.client" level="ERROR"/>
+    <logger name="reactor.netty" level="ERROR"/>
+    <logger name="org.apache.catalina" level="ERROR"/>
+    <logger name="org.apache.tomcat" level="ERROR"/>
 
     <!-- Root logger -->
     <root level="ERROR">
