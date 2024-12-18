@@ -5,29 +5,38 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import de.codecentric.boot.admin.server.domain.events.InstanceEvent;
+import de.codecentric.boot.admin.server.domain.events.InstanceDeregisteredEvent;
 import de.codecentric.boot.admin.server.domain.events.InstanceRegisteredEvent;
 import de.codecentric.boot.admin.server.domain.events.InstanceStatusChangedEvent;
 import jakarta.annotation.PostConstruct;
 
 @Component
 public class InstanceEventLogger {
+    private static final Logger logger = LoggerFactory.getLogger(InstanceEventLogger.class);
 
-    private static final Logger log = LoggerFactory.getLogger(InstanceEventLogger.class);
-
-    @PostConstruct
-    public void init() {
-        log.info("InstanceEventLogger initialized!");
+    @EventListener
+    public void handleInstanceRegisteredEvent(InstanceRegisteredEvent event) {
+        logger.info("Client Application Registered: Name = {}, ID = {}, Source = {}",
+            event.getRegistration().getName(),
+            event.getInstance(),
+            event.getRegistration().getSource());
     }
 
     @EventListener
-    public void onInstanceEvent(InstanceEvent event) {
-        log.info("Event received: {}", event.getClass().getSimpleName());
-        if (event instanceof InstanceRegisteredEvent) {
-            log.info("Instance registered: {}", event.getInstance());
-        } else if (event instanceof InstanceStatusChangedEvent) {
-            InstanceStatusChangedEvent statusEvent = (InstanceStatusChangedEvent) event;
-            log.info("Instance status changed to {}: {}", statusEvent.getStatusInfo().getStatus(), event.getInstance());
-        }
+    public void handleInstanceDeregisteredEvent(InstanceDeregisteredEvent event) {
+        logger.info("Client Application Deregistered: Instance = {}", event.getInstance());
+    }
+
+    @EventListener
+    public void handleInstanceStatusChangedEvent(InstanceStatusChangedEvent event) {
+        logger.info("Client Application Status Changed: Instance = {}, New Status = {}, Details = {}",
+            event.getInstance(),
+            event.getStatusInfo().getStatus(),
+            event.getStatusInfo().getDetails());
+    }
+
+    @PostConstruct
+    public void init() {
+        logger.info("InstanceEventLogger initialized and ready to track application events!");
     }
 }

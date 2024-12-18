@@ -42,7 +42,7 @@ repositories {
 }
 
 ext {
-	set('springBootAdminVersion', "3.3.0") // Downgrade Spring Boot Admin version to 3.3.0
+	set('springBootAdminVersion', "3.2.0") // Downgrade Spring Boot Admin version to 3.3.0
 }
 
 dependencies {
